@@ -16,6 +16,11 @@ function urlOf(string $path)
     return "/" . APP_DIR . "/" . $path;
 }
 
+function token(string $token)
+{
+    echo json_encode(["token" => $token]);
+}
+
 function reply(array $response)
 {
     echo json_encode(["messages" => $response]);
@@ -45,3 +50,4 @@ require_once pathOf("/libs/Mail.php");
 require_once pathOf("/libs/GUID.php");
 require_once pathOf("/libs/PasswordUtils.php");
 require_once pathOf("/libs/Validator.php");
+require_once pathOf("/libs/JwtUtils.php");
