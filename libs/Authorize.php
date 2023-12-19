@@ -5,6 +5,9 @@ class Authorize
     public static function forRoles(?array $roles = null)
     {
         $authHeader = self::getAuthHeader();
+        if ($authHeader == null)
+            error(401);
+
         $token = self::getTokenFromHeader($authHeader);
 
         $payload = JwtUtils::decode($token);
