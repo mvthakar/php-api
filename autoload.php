@@ -32,6 +32,15 @@ function error(int $statusCode, ?array $response = null)
     die($response != null ? json_encode(["messages" => $response]) : "");
 }
 
+function get()
+{
+    if ($_SERVER['REQUEST_METHOD'] != 'GET')
+    {
+        http_response_code(415);
+        die();
+    }
+}
+
 function post()
 {
     if ($_SERVER['REQUEST_METHOD'] != 'POST')

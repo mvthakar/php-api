@@ -67,7 +67,7 @@ CREATE TABLE `categories`
     `id` INT PRIMARY KEY AUTO_INCREMENT,
     `slug` VARCHAR(255) NOT NULL,
     `name` VARCHAR(100) NOT NULL,
-    `imageFileName` VARCHAR(255) NOT NULL
+    `imageFileName` VARCHAR(255) DEFAULT NULL
 );
 
 CREATE TABLE `products`
