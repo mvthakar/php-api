@@ -35,6 +35,9 @@ class Authorize
         $search = "Bearer";
         $replace = "";
 
+        if (!str_starts_with($header, "$search "))
+            error(401);
+
         return implode($replace, explode($search, $header, 2));
     }
 }
