@@ -36,7 +36,7 @@ function get()
 {
     if ($_SERVER['REQUEST_METHOD'] != 'GET')
     {
-        http_response_code(415);
+        http_response_code(405);
         die();
     }
 }
@@ -45,7 +45,7 @@ function post()
 {
     if ($_SERVER['REQUEST_METHOD'] != 'POST')
     {
-        http_response_code(415);
+        http_response_code(405);
         die();
     }
 
