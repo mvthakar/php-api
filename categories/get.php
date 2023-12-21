@@ -3,7 +3,7 @@
 get();
 
 $pageNumber = $_GET['page'] ?? 1;
-$itemsPerPage = 2;
+$itemsPerPage = $_GET['count'] ?? 10;
 $offset = $itemsPerPage * ($pageNumber - 1);
 
 if ($pageNumber < 1)
