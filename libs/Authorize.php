@@ -2,23 +2,32 @@
 
 class Authorize
 {
-    public static function forRoles(?array $roles = null)
+    private static ?array $claims = null;
+    public static function claims(): array { return self::$claims; }
+
+    public static function forRoles(?array $roles = null, bool $allowExpiredJwt = false)
     {
         $authHeader = self::getAuthHeader();
         if ($authHeader == null)
             error(401);
 
-        $token = self::getTokenFromHeader($authHeader);
+        $token = self::getAccessTokenFromHeader($authHeader);
 
         $payload = JwtUtils::decode($token);
         if (count($payload) == 0)
             error(401);
 
-        if ($roles == null || count($roles) == 0)
-            return;
-        
-        if (!in_array($payload["role"], $roles))
+        if ($roles != null && count($roles) > 0 && !in_array($payload["role"], $roles))
             error(401);
+
+        if (!$allowExpiredJwt)
+        {
+            $expired = (new DateTime())->getTimestamp() > $payload["exp"];
+            if ($expired)
+                error(401);
+        }
+
+        self::$claims = $payload;
     }
 
     private static function getAuthHeader(): ?string
@@ -30,7 +39,7 @@ class Authorize
         return $headers['Authorization'];
     }
 
-    private static function getTokenFromHeader(string $header): string
+    private static function getAccessTokenFromHeader(string $header): string
     {
         $search = "Bearer";
         $replace = "";
