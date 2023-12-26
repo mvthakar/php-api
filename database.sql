@@ -26,14 +26,38 @@ CREATE TABLE `users`
     `passwordHash` VARCHAR(500) DEFAULT NULL,
     `signedUpOnDateTime` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-    `authToken` VARCHAR(500) DEFAULT NULL,
-    `fcmToken` VARCHAR(500) DEFAULT NULL,
-
     `authProviderId` INT NOT NULL,
     CONSTRAINT `fkAuthProviderIdInUsers` FOREIGN KEY (`authProviderId`) REFERENCES `authProviders`(`id`),
 
     `roleId` INT NOT NULL,
     CONSTRAINT `fkRoleIdInUserRoles` FOREIGN KEY (`roleId`) REFERENCES `roles`(`id`)
+);
+
+CREATE TABLE `tokenTypes`
+(
+    `id` INT PRIMARY KEY AUTO_INCREMENT,
+    `name` VARCHAR(200) NOT NULL
+);
+INSERT INTO `tokenTypes` (`name`) VALUES 
+    ('RefreshToken'), 
+    ('AuthToken'), 
+    ('FcmToken');
+
+CREATE TABLE `userTokens`
+(
+    `id` INT PRIMARY KEY AUTO_INCREMENT,
+
+    `tokenTypeId` INT NOT NULL,
+    CONSTRAINT `fkTokenTypeIdinUserTokens` FOREIGN KEY (`tokenTypeId`) REFERENCES `tokenTypes`(`id`),
+
+    `clientId` TEXT NOT NULL,
+    `value` TEXT NOT NULL,
+
+    `issuedOnDateTime` DATETIME DEFAULT NULL,
+    `expiresOnDateTime` DATETIME DEFAULT NULL,
+
+    `userId` INT NOT NULL,
+    CONSTRAINT `fkUserIdinUserTokens` FOREIGN KEY (`userId`) REFERENCES `users`(`id`)
 );
 
 CREATE TABLE `generatedOtps`

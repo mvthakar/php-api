@@ -16,9 +16,9 @@ function urlOf(string $path)
     return "/" . APP_DIR . "/" . $path;
 }
 
-function token(string $token)
+function tokens(array $tokens)
 {
-    echo json_encode(["token" => $token]);
+    echo json_encode($tokens);
 }
 
 function reply(array $response)
