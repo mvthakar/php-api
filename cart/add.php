@@ -100,7 +100,8 @@ $setOfOrderProducts = [];
 
 foreach ($orderProducts as $orderProduct)
 {
-    array_push($setOfQuestionMarks, "(?, ?, ?)");
+    array_push($setOfQuestionMarks, "(?, ?, ?, ?)");
+    array_push($setOfOrderProducts, GUID::generate());
     array_push($setOfOrderProducts, $orderProduct->quantity);
     array_push($setOfOrderProducts, $orderId);
     array_push($setOfOrderProducts, $orderProduct->product->id);
@@ -108,6 +109,6 @@ foreach ($orderProducts as $orderProduct)
 
 $questionMarks = join(",", $setOfQuestionMarks);
 $db->execute(
-    "INSERT INTO `orderProducts` (`quantity`, `orderId`, `productId`) VALUES $questionMarks",
+    "INSERT INTO `orderProducts` (`slug`, `quantity`, `orderId`, `productId`) VALUES $questionMarks",
     $setOfOrderProducts
 );

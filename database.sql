@@ -164,10 +164,11 @@ CREATE TABLE `orders`
 CREATE TABLE `orderProducts`
 (
     `id` INT PRIMARY KEY AUTO_INCREMENT,
+    `slug` VARCHAR(255) NOT NULL,
     `quantity` INT NOT NULL,
 
     `orderId` INT NOT NULL,
-    CONSTRAINT `fkOrderIdinOrderProducts` FOREIGN KEY (`orderId`) REFERENCES `orders`(`id`),
+    CONSTRAINT `fkOrderIdinOrderProducts` FOREIGN KEY (`orderId`) REFERENCES `orders`(`id`) ON DELETE CASCADE,
     
     `productId` INT NOT NULL,
     CONSTRAINT `fkProductIdInOrderProducts` FOREIGN KEY (`productId`) REFERENCES `products`(`id`)
