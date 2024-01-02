@@ -80,7 +80,7 @@ CREATE TABLE `userProfiles`
     `pincode` VARCHAR(6) NOT NULL,
     `city` VARCHAR(255) NOT NULL,
     `state` VARCHAR(255) NOT NULL,
-    `profilePictureFileName` VARCHAR(255) DEFAULT NULL,
+    `avatarFileName` VARCHAR(255) DEFAULT NULL,
 
     `userId` INT NOT NULL,
     CONSTRAINT `fkUserIdinUserProfiles` FOREIGN KEY (`userId`) REFERENCES `users`(`id`)
