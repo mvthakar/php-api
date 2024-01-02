@@ -100,7 +100,7 @@ CREATE TABLE `products`
     `slug` VARCHAR(255) NOT NULL,
     `name` VARCHAR(255) NOT NULL,
     `description` TEXT NOT NULL,
-    `price` NUMERIC NOT NULL,
+    `price` FLOAT NOT NULL,
     `isOutOfStock` BOOLEAN NOT NULL,
     `createdOnDateTime` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `updatedOnDateTime` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
@@ -147,12 +147,12 @@ CREATE TABLE `orders`
     `orderedOnDateTime` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `deliveredOnDateTime` DATETIME DEFAULT NULL,
     
-    `totalPriceWithoutTax` NUMERIC NOT NULL,
-    `cgstPercentage` NUMERIC NOT NULL,
-    `cgstAmount` NUMERIC NOT NULL,
-    `sgstPercentage` NUMERIC NOT NULL,
-    `sgstAmount` NUMERIC NOT NULL,
-    `totalPriceWithTax` NUMERIC NOT NULL,
+    `totalPriceWithoutTax` FLOAT NOT NULL,
+    `cgstPercentage` FLOAT NOT NULL,
+    `cgstAmount` FLOAT NOT NULL,
+    `sgstPercentage` FLOAT NOT NULL,
+    `sgstAmount` FLOAT NOT NULL,
+    `totalPriceWithTax` FLOAT NOT NULL,
 
     `orderStatusId` INT NOT NULL,
     CONSTRAINT `fkOrderStatusIdinOrders` FOREIGN KEY (`orderStatusId`) REFERENCES `orderStatus`(`id`),
@@ -164,10 +164,11 @@ CREATE TABLE `orders`
 CREATE TABLE `orderProducts`
 (
     `id` INT PRIMARY KEY AUTO_INCREMENT,
+    `slug` VARCHAR(255) NOT NULL,
     `quantity` INT NOT NULL,
 
     `orderId` INT NOT NULL,
-    CONSTRAINT `fkOrderIdinOrderProducts` FOREIGN KEY (`orderId`) REFERENCES `orders`(`id`),
+    CONSTRAINT `fkOrderIdinOrderProducts` FOREIGN KEY (`orderId`) REFERENCES `orders`(`id`) ON DELETE CASCADE,
     
     `productId` INT NOT NULL,
     CONSTRAINT `fkProductIdInOrderProducts` FOREIGN KEY (`productId`) REFERENCES `products`(`id`)
