@@ -38,77 +38,128 @@ for ($i = 0; $i < count($products); $i++)
     if ($products[$i]->isOutOfStock)
         array_push($outOfStockErrors, ["id" => $products[$i]->slug]);
 
-    $orderProducts[$i]->product = $products[$i];
+    $orderProducts[$i]->productId = $products[$i]->id;
+    $orderProducts[$i]->price = $products[$i]->price;
 }
 
 if (count($outOfStockErrors) > 0)
     error(422, $outOfStockErrors);
 
-$totalPriceWithTax = 0;
-$totalPriceWithoutTax = 0;
-$totalCgstAmount = 0;
-$totalSgstAmount = 0;
+$existingCart = $db->get("
+    SELECT 
+        `id`,
+        `totalPriceWithoutTax`, 
+        `cgstAmount`, 
+        `sgstAmount`, 
+        `totalPriceWithTax`
+    FROM
+        `orders`
+    WHERE
+        `orderStatusId` = ? AND `userId` = ?
+", [$orderStatus->id, $userId]);
+
+$existingCartProducts = [];
+if ($existingCart != null)
+{
+    $existingCartProducts = $db->getAll(
+        "SELECT `productId`, `quantity` FROM `orderProducts` WHERE `orderId` = ?",
+        [$existingCart?->id]
+    );
+}
+
+$result = GstUtils::calculate($orderProducts);
 
 $cgstPercentage = 9;
 $sgstPercentage = 9;
-$totalGstPercentage = $cgstPercentage + $sgstPercentage;
+$totalPriceWithoutTax = ($existingCart?->totalPriceWithoutTax ?? 0) + $result["totalPriceWithoutTax"];
+$totalCgstAmount = ($existingCart?->cgstAmount ?? 0) + $result["totalCgstAmount"];
+$totalSgstAmount = ($existingCart?->sgstAmount ?? 0) + $result["totalSgstAmount"];
+$totalPriceWithTax = ($existingCart?->totalPriceWithTax ?? 0) + $result["totalPriceWithTax"];
 
-foreach($orderProducts as $orderProduct)
+$orderId = -1;
+if ($existingCart != null)
 {
-    $priceWithTax = round($orderProduct->quantity * $orderProduct->product->price, 2);
-    $gstAmount = round($priceWithTax - $priceWithTax / (1.0 + ($totalGstPercentage / 100)), 2);
-    $cgstAmount = round($gstAmount * $cgstPercentage / $totalGstPercentage, 2);
-    $sgstAmount = round($gstAmount * $sgstPercentage / $totalGstPercentage, 2);
-    $priceWithoutTax = round($priceWithTax - $cgstAmount - $sgstAmount, 2);
+    $orderId = $existingCart->id;
 
-    $totalPriceWithTax += $priceWithTax;
-    $totalCgstAmount += $cgstAmount;
-    $totalSgstAmount += $sgstAmount;
-    $totalPriceWithoutTax += $priceWithoutTax;
-}
-
-$db->execute("
-    INSERT INTO `orders` 
-    (
-        `slug`, 
-        `totalPriceWithoutTax`, 
-        `cgstPercentage`, 
-        `cgstAmount`, 
-        `sgstPercentage`, 
-        `sgstAmount`, 
-        `totalPriceWithTax`, 
-        `orderStatusId`, 
-        `userId`
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
-    [
-        $slug, 
-        $totalPriceWithoutTax, 
-        $cgstPercentage, 
-        $totalCgstAmount, 
-        $sgstPercentage, 
+    $db->execute("
+        UPDATE `orders` SET
+            `totalPriceWithoutTax` = ?, 
+            `cgstPercentage` = ?, 
+            `cgstAmount` = ?, 
+            `sgstPercentage` = ?, 
+            `sgstAmount` = ?, 
+            `totalPriceWithTax` = ?
+        WHERE
+            `id` = ?
+    ", 
+    [ 
+        $totalPriceWithoutTax,
+        $cgstPercentage,
+        $totalCgstAmount,
+        $sgstPercentage,
         $totalSgstAmount,
         $totalPriceWithTax,
-        $orderStatus->id,
-        $userId
-    ]
-);
+        $orderId
+    ]);
+}
+else
+{
+    $db->execute("
+        INSERT INTO `orders` 
+        (
+            `slug`, 
+            `totalPriceWithoutTax`, 
+            `cgstPercentage`, 
+            `cgstAmount`, 
+            `sgstPercentage`, 
+            `sgstAmount`, 
+            `totalPriceWithTax`, 
+            `orderStatusId`, 
+            `userId`
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+        [
+            $slug, 
+            $totalPriceWithoutTax, 
+            $cgstPercentage, 
+            $totalCgstAmount, 
+            $sgstPercentage, 
+            $totalSgstAmount,
+            $totalPriceWithTax,
+            $orderStatus->id,
+            $userId
+        ]
+    );
 
-$orderId = $db->lastInsertId();
-
-$setOfQuestionMarks = [];
-$setOfOrderProducts = [];
+    $orderId = $db->lastInsertId();
+}
 
 foreach ($orderProducts as $orderProduct)
 {
-    array_push($setOfQuestionMarks, "(?, ?, ?, ?)");
-    array_push($setOfOrderProducts, GUID::generate());
-    array_push($setOfOrderProducts, $orderProduct->quantity);
-    array_push($setOfOrderProducts, $orderId);
-    array_push($setOfOrderProducts, $orderProduct->product->id);
-}
+    $orderProduct->updateQuantity = $orderProduct->quantity;
 
-$questionMarks = join(",", $setOfQuestionMarks);
-$db->execute(
-    "INSERT INTO `orderProducts` (`slug`, `quantity`, `orderId`, `productId`) VALUES $questionMarks",
-    $setOfOrderProducts
-);
+    foreach ($existingCartProducts as $existingProduct)
+    {
+        if ($orderProduct->productId == $existingProduct->productId)
+        {
+            $orderProduct->updateQuantity += $existingProduct->quantity;
+            break;
+        }
+    }
+
+    $query = "
+        INSERT INTO 
+            `orderProducts` (`slug`, `quantity`, `orderId`, `productId`) 
+        VALUES 
+            (?, ?, ?, ?)
+        ON DUPLICATE KEY UPDATE `quantity` = ?";
+
+    $params = [
+        GUID::generate(), 
+        $orderProduct->quantity, 
+        $orderId, 
+        $orderProduct->productId, 
+        $orderProduct->updateQuantity
+    ];
+
+    $db->execute($query, $params);
+}

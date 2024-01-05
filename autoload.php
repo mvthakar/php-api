@@ -58,6 +58,7 @@ require_once pathOf("/libs/OtpManager.php");
 require_once pathOf("/libs/Mail.php");
 require_once pathOf("/libs/GUID.php");
 require_once pathOf("/libs/PasswordUtils.php");
+require_once pathOf("/libs/GstUtils.php");
 require_once pathOf("/libs/Validator.php");
 require_once pathOf("/libs/JwtUtils.php");
 require_once pathOf("/libs/Authorize.php");

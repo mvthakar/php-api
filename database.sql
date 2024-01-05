@@ -171,5 +171,7 @@ CREATE TABLE `orderProducts`
     CONSTRAINT `fkOrderIdinOrderProducts` FOREIGN KEY (`orderId`) REFERENCES `orders`(`id`) ON DELETE CASCADE,
     
     `productId` INT NOT NULL,
-    CONSTRAINT `fkProductIdInOrderProducts` FOREIGN KEY (`productId`) REFERENCES `products`(`id`)
+    CONSTRAINT `fkProductIdInOrderProducts` FOREIGN KEY (`productId`) REFERENCES `products`(`id`),
+
+    CONSTRAINT `ukOrderIdProductId` UNIQUE (`orderId`, `productId`)
 );
