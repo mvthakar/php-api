@@ -11,15 +11,15 @@ $userId = $claims["id"];
 $inCartOrderStatus = $db->get("SELECT `id` FROM `orderStatus` WHERE `name` = 'In cart'");
 $placedOrderStatus = $db->get("SELECT `id` FROM `orderStatus` WHERE `name` = 'Placed'");
 
-$order = $db->get(
+$cart = $db->get(
     "SELECT `id` FROM `orders` WHERE `orderStatusId` = ? AND `userId` = ?",
     [$inCartOrderStatus->id, $userId]
 );
 
-if ($order == null)
+if ($cart == null)
     error(404);
 
 $db->execute(
     "UPDATE `orders` SET `orderStatusId` = ? WHERE `id` = ?",
-    [$placedOrderStatus->id, $order->id]
+    [$placedOrderStatus->id, $cart->id]
 );
