@@ -133,7 +133,7 @@ CREATE TABLE `orderStatus`
 );
 INSERT INTO `orderStatus` (`name`) VALUES 
     ('In cart'), 
-    ('Pending'),
+    ('Placed'),
     ('On the way'), 
     ('Delivered'), 
     ('Canceled'), 
