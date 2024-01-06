@@ -1,6 +1,6 @@
 <?php
 
-Authorize::forRoles(["Admin"], allowExpiredJwt: true);
+Authorize::forRoles(["Admin"]);
 $req = post();
 
 if (!isset($req->orderId) || !isset($req->status))
@@ -22,7 +22,17 @@ if ($status->name != 'On the way' &&
     $status->name != 'Rejected')
     error(422, ["Cannot change status for this order"]);
 
-$db->execute(
-    "UPDATE `orders` SET `orderStatusId` = ? WHERE `id` = ?",
+$deliveredOnDateTime = $status->name == 'Delivered' ? 'CURRENT_TIMESTAMP()' : 'null';
+$db->execute("
+        UPDATE 
+            `orders` 
+        SET 
+            `orderStatusId` = ? , 
+            `deliveredOnDateTime` = $deliveredOnDateTime 
+        WHERE `id` = ?
+    ",
     [$status->id, $order->id]
 );
+
+// TODO: Send FCM notification to the user
+// TODO: Send email to user

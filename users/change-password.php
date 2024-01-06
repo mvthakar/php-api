@@ -1,6 +1,6 @@
 <?php
 
-Authorize::forRoles(allowExpiredJwt: true);
+Authorize::forRoles();
 
 $req = post();
 

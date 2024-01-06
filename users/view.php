@@ -1,6 +1,6 @@
 <?php
 
-Authorize::forRoles(["Admin"], allowExpiredJwt: true);
+Authorize::forRoles(["Admin"]);
 get();
 
 $pageNumber = $_GET['page'] ?? 1;
