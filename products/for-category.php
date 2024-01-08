@@ -16,26 +16,40 @@ if ($pageNumber < 1)
 
 $db = Database::instance();
 $items = $db->getAll("
-SELECT 
-`products`.`slug`,
-`products`.`name`,
-`products`.`price`,
-(SELECT `productImages`.`imageFileName` FROM `productImages` WHERE `productImages`.`productId` = `products`.`id` LIMIT 1) AS `imageFileName`
-FROM 
-`productCategories`
-INNER JOIN `products` ON `products`.`id` = `productCategories`.`productId`
-WHERE 
-`productCategories`.`categoryId` = (
     SELECT 
-        `categories`.`id` 
+        `products`.`slug`,
+        `products`.`name`,
+        `products`.`price`,
+        (
+            SELECT 
+                `productImages`.`imageFileName` 
+            FROM 
+                `productImages` 
+            WHERE 
+                `productImages`.`productId` = `products`.`id` 
+            LIMIT 1
+        ) AS `imageFileName`
     FROM 
-        `categories` 
+        `productCategories`
+    INNER JOIN 
+        `products` ON `products`.`id` = `productCategories`.`productId`
     WHERE 
-        `categories`.`slug` = ?
-)
-AND
-`products`.`isOutOfStock` = FALSE ORDER BY `products`.`updatedOnDateTime` DESC
-LIMIT $itemsPerPage OFFSET $offset
+        `productCategories`.`categoryId` = (
+            SELECT 
+                `categories`.`id` 
+            FROM 
+                `categories` 
+            WHERE 
+                `categories`.`slug` = ?
+        )
+    AND
+        `products`.`isOutOfStock` = FALSE 
+    AND
+        `products`.`isDeleted` = FALSE
+    ORDER BY 
+        `products`.`updatedOnDateTime` 
+    DESC 
+    LIMIT $itemsPerPage OFFSET $offset
 ", [$categorySlug]);
 
 reply($items);

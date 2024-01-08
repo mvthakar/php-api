@@ -31,6 +31,4 @@ foreach ($productImages as $productImage)
     unlink("$productImagesPath/$fileName");
 }
 
-$db->execute("DELETE FROM `productImages` WHERE `productId` = ?", [$productId]);
-$db->execute("DELETE FROM `productCategories` WHERE `productId` = ?", [$productId]);
-$db->execute("DELETE FROM `products` WHERE `id` = ?", [$productId]);
+$db->execute("UPDATE `products` SET `isDeleted` = TRUE WHERE `id` = ?", [$productId]);

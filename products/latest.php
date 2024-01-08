@@ -12,7 +12,7 @@ if ($pageNumber < 1)
 $db = Database::instance();
 $items = $db->getAll("
     SELECT `slug`, `name`, `price`, (SELECT `imageFileName` FROM `productImages` WHERE `productId` = `products`.`id` LIMIT 1) AS `imageFileName`
-    FROM `products` WHERE `isOutOfStock` = FALSE ORDER BY `updatedOnDateTime` DESC LIMIT $itemsPerPage OFFSET $offset
+    FROM `products` WHERE `isOutOfStock` = FALSE AND `isDeleted` = FALSE ORDER BY `updatedOnDateTime` DESC LIMIT $itemsPerPage OFFSET $offset
 ");
 
 reply($items);

@@ -13,7 +13,7 @@ $slug = $_GET['id'];
 
 $db = Database::instance();
 $product = $db->get(
-    "SELECT `id` FROM `products` WHERE `slug` = ?",
+    "SELECT `id` FROM `products` WHERE `slug` = ? AND `isDeleted` = FALSE",
     [$slug]
 );
 
