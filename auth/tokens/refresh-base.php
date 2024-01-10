@@ -3,7 +3,7 @@
 function generateNewTokens($clientId, $refreshToken)
 {
     if ($clientId == null || $refreshToken == null)
-        error(401);
+        error(400);
     
     $claims = Authorize::claims();
     $userId = $claims["id"];
