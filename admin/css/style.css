@@ -1,0 +1,61 @@
+:root
+{
+    --custom-primary: #356ca8;
+    --custom-primary-hover: #28517c;
+    --custom-breadcrumb-color: #356ca8;
+}
+
+body.dark-mode
+{
+    --custom-primary: #6889ac;
+    --custom-primary-hover: #6889ac;
+    --custom-breadcrumb-color: white;
+}
+
+.dark-mode .sidebar-dark-primary .nav-sidebar > .nav-item > .nav-link.active
+{
+    background-color: #6889ac;
+}
+
+.sidebar-light-primary .nav-sidebar > .nav-item > .nav-link.active
+{
+    background-color: #356ca8;
+}
+
+[class*="sidebar-dark-"] .nav-treeview > .nav-item > .nav-link.active
+{
+    background-color: #505963;
+    color: white;
+}
+
+.card-primary:not(.card-outline) > .card-header
+{
+    background-color: var(--custom-primary) !important;
+}
+
+.btn-primary
+{
+    background-color: var(--custom-primary) !important;
+    border-color: var(--custom-primary) !important;
+}
+
+.btn-primary:hover
+{
+    background-color: var(--custom-primary-hover) !important;
+    border-color: var(--custom-primary-hover) !important;
+}
+
+.breadcrumb-item a:not(.btn)
+{
+    color: var(--custom-breadcrumb-color) !important;
+}
+
+.breadcrumb-item a:not(.btn):hover
+{
+    color: var(--custom-primary-hover) !important;
+}
+
+#btn-submit 
+{
+    min-width: 6rem !important;
+}
