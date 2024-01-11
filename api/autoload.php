@@ -1,19 +1,25 @@
 <?php
 
 define('ROOT', $_SERVER['DOCUMENT_ROOT']);
-define('APP_DIR', "/api");
+define('APP_DIR', "/project");
+define('API_DIR', "/project/api");
 
 header('Content-Type: application/json');
 date_default_timezone_set("Asia/Calcutta");
 
-function pathOf(string $path): string
+function appPathOf(string $path): string
 {
     return ROOT . "/" . APP_DIR . "/" . $path;
 }
 
+function pathOf(string $path): string
+{
+    return ROOT . "/" . API_DIR . "/" . $path;
+}
+
 function urlOf(string $path)
 {
-    return "/" . APP_DIR . "/" . $path;
+    return "/" . API_DIR . "/" . $path;
 }
 
 function tokens(array $tokens)
@@ -60,5 +66,6 @@ require_once pathOf("/libs/GUID.php");
 require_once pathOf("/libs/PasswordUtils.php");
 require_once pathOf("/libs/GstUtils.php");
 require_once pathOf("/libs/Validator.php");
-require_once pathOf("/libs/JwtUtils.php");
-require_once pathOf("/libs/Authorize.php");
+
+require_once appPathOf("/libs/JwtUtils.php");
+require_once appPathOf("/libs/Authorize.php");
