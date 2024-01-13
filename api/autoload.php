@@ -1,8 +1,8 @@
 <?php
 
 define('ROOT', $_SERVER['DOCUMENT_ROOT']);
-define('APP_DIR', "/project");
-define('API_DIR', "/project/api");
+define('APP_DIR', "project");
+define('API_DIR', "project/api");
 
 header('Content-Type: application/json');
 date_default_timezone_set("Asia/Calcutta");
@@ -59,13 +59,13 @@ function post()
     return json_decode($rawRequest);
 }
 
-require_once pathOf("/libs/Database.php");
-require_once pathOf("/libs/OtpManager.php");
-require_once pathOf("/libs/Mail.php");
-require_once pathOf("/libs/GUID.php");
-require_once pathOf("/libs/PasswordUtils.php");
-require_once pathOf("/libs/GstUtils.php");
-require_once pathOf("/libs/Validator.php");
+require_once pathOf("libs/Database.php");
+require_once pathOf("libs/OtpManager.php");
+require_once pathOf("libs/Mail.php");
+require_once pathOf("libs/GUID.php");
+require_once pathOf("libs/PasswordUtils.php");
+require_once pathOf("libs/GstUtils.php");
+require_once pathOf("libs/Validator.php");
 
-require_once appPathOf("/libs/JwtUtils.php");
-require_once appPathOf("/libs/Authorize.php");
+require_once appPathOf("libs/JwtUtils.php");
+require_once appPathOf("libs/Authorize.php");
