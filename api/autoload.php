@@ -59,13 +59,14 @@ function post()
     return json_decode($rawRequest);
 }
 
-require_once pathOf("libs/Database.php");
+require_once appPathOf("libs/Database.php");
+require_once appPathOf("libs/TokenUtils.php");
+
 require_once pathOf("libs/OtpManager.php");
 require_once pathOf("libs/Mail.php");
 require_once pathOf("libs/GUID.php");
 require_once pathOf("libs/PasswordUtils.php");
 require_once pathOf("libs/GstUtils.php");
 require_once pathOf("libs/Validator.php");
-
-require_once appPathOf("libs/JwtUtils.php");
-require_once appPathOf("libs/Authorize.php");
+require_once pathOf("libs/JwtUtils.php");
+require_once pathOf("libs/Authorize.php");

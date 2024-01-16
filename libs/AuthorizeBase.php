@@ -1,42 +1,60 @@
 <?php
 
-class Authorize
+class AuthorizeBase
 {
     private static ?array $claims = null;
     public static function claims(): array { return self::$claims; }
 
-    public static function forRoles(?array $roles = null, bool $allowExpiredJwt = false)
+    protected static function _forRoles($errorCallback, ?array $roles = null, bool $allowExpiredJwt = false)
     {
         $authHeader = self::getAuthHeader();
         if ($authHeader == null)
-            error(401);
+            $errorCallback(401);
 
         $token = self::getAccessTokenFromHeader($authHeader);
-
         $payload = JwtUtils::decode($token);
+
         if (count($payload) == 0)
-            error(401);
+            $errorCallback(401);
 
         if ($roles != null && count($roles) > 0 && !in_array($payload["role"], $roles))
-            error(401);
+            $errorCallback(403);
 
         if (!$allowExpiredJwt)
         {
             $expired = (new DateTime())->getTimestamp() > $payload["exp"];
             if ($expired)
-                error(401);
+                $errorCallback(401);
         }
 
         self::$claims = $payload;
     }
 
+    public static function onlyAnonymous()
+    {
+        $authHeader = self::getAuthHeader();
+        if ($authHeader == null)
+            return;
+
+        $token = self::getAccessTokenFromHeader($authHeader);
+        $payload = JwtUtils::decode($token);
+
+        if (count($payload) == 0)
+            return;
+
+        $expired = (new DateTime())->getTimestamp() > $payload["exp"];
+        if ($expired)
+            return;
+
+        error(403);
+    }
+
     private static function getAuthHeader(): ?string
     {
         $headers = apache_request_headers();
-        if(!isset($headers['Authorization']))
-            return null;
+        @$value = $headers['Authorization'] ?? $_COOKIE['accessToken'];
 
-        return $headers['Authorization'];
+        return $value;
     }
 
     private static function getAccessTokenFromHeader(string $header): string

@@ -23,3 +23,27 @@ else
         [$userId]
     );
 }
+
+setcookie(
+    "accessToken", 
+    "", 
+    expires_or_options: time() - 100, 
+    path: "/", 
+    domain: "localhost"
+);
+
+setcookie(
+    "refreshToken", 
+    "", 
+    expires_or_options: time() - 100, 
+    path: "/", 
+    domain: "localhost"
+);
+
+setcookie(
+    "clientId", 
+    "", 
+    expires_or_options: time() - 100, 
+    path: "/", 
+    domain: "localhost"
+);

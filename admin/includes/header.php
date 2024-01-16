@@ -21,6 +21,12 @@ function urlOf(string $path)
   return "/" . ADMIN_DIR . "/" . $path;
 }
 
+require_once appPathOf("libs/Database.php");
+require_once appPathOf("libs/TokenUtils.php");
+
+require_once pathOf('libs/JwtUtils.php');
+require_once pathOf('libs/Authorize.php');
+
 ?>
 
 <!DOCTYPE html>
@@ -29,7 +35,7 @@ function urlOf(string $path)
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>AdminLTE 3 | Starter</title>
+  <title>Project</title>
 
   <link rel="stylesheet" href="<?= urlOf('plugins/fontawesome-free/css/all.min.css') ?>">
   
@@ -37,7 +43,10 @@ function urlOf(string $path)
   <link rel="stylesheet" href="<?= urlOf('css/adminlte.min.css') ?>">
   <link rel="stylesheet" href="<?= urlOf('css/style.css') ?>"> 
 
+  <script src="<?= urlOf('plugins/jquery/jquery.min.js') ?>"></script>
   <script src="<?= urlOf('js/constants.js') ?>"></script>
+  <script src="<?= urlOf('js/app.js') ?>"></script>
+  <script src="<?= urlOf('js/auth.js') ?>"></script>
 </head>
 
 <body class="hold-transition sidebar-mini">
@@ -97,7 +106,7 @@ function urlOf(string $path)
               </a>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
-                  <a href="#" class="nav-link active">
+                  <a href="<?= urlOf('categories/index.php') ?>" class="nav-link active">
                     <i class="fas fa-stream nav-icon"></i>
                     <p>Categories</p>
                   </a>
@@ -118,7 +127,7 @@ function urlOf(string $path)
             </li>
             <li class="nav-item menu-open">
               <a href="#" class="nav-link active">
-                <i class="nav-icon fas fa-book-open"></i>
+                <i class="nav-icon fas fa-cog"></i>
                 <p>
                   Settings
                   <i class="right fas fa-angle-left"></i>
@@ -127,13 +136,13 @@ function urlOf(string $path)
               <ul class="nav nav-treeview">
                 <li class="nav-item">
                   <a href="<?= urlOf('change-password.php') ?>" class="nav-link">
-                    <i class="fas fa-stream nav-icon"></i>
-                    <p>Change password</p>
+                    <i class="fas fa-key nav-icon"></i>
+                    <p>Change password</p>  
                   </a>
                 </li>
                 <li class="nav-item">
                   <a role="button" class="nav-link" onclick="logout()">
-                    <i class="fas fa-shopping-bag nav-icon"></i>
+                    <i class="fas fa-sign-out-alt nav-icon"></i>
                     <p>Log out</p>
                   </a>
                 </li>

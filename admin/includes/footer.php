@@ -6,12 +6,10 @@
 </footer>
 
 </div>
-  <script src="<?= urlOf('plugins/jquery/jquery.min.js') ?>"></script>
   <script src="<?= urlOf('plugins/bootstrap/js/bootstrap.bundle.min.js') ?>"></script>
   <script src="<?= urlOf('js/adminlte.min.js') ?>"></script>
 
-  <script src="<?= urlOf('js/app.js') ?>"></script>
-  <script src="<?= urlOf('js/auth.js') ?>"></script>
+  <script src="<?= urlOf('js/init.js') ?>"></script>
 </body>
 
 </html>

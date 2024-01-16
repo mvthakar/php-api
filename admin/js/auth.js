@@ -12,15 +12,14 @@ async function login(event)
         password: $('#password').val()
     };
 
-    let response = await post('auth/login-web.php', data, sendToken = false);
+    let response = await post('auth/login-web.php', data, false);
     if (response.status == 200)
     {
         $('#btn-submit-text').hide();
         $('#btn-submit-text-saved').show();
         $('#btn-submit-spinner').hide();
 
-        localStorage.setItem('accessToken', response.message.accessToken);
-        // setTimeout(() => window.location.href = './', 1000);
+        setTimeout(() => window.location.href = './index.php', 1000);
     }
     else
     {
@@ -85,7 +84,7 @@ async function changePassword(event)
 
 async function logout()
 {
-    await post('auth/logout.php');
+    await post('auth/logout.php', null, false);
     window.location.href = 'login.php';
 }
 

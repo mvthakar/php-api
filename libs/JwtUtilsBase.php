@@ -1,6 +1,6 @@
 <?php
 
-class JwtUtils
+class JwtUtilsBase
 {
     private const KEY = "This is obviously a strong key!";
     private const ALGO = "AES-256-CBC";
@@ -9,7 +9,7 @@ class JwtUtils
     public static function generateAccessToken(array $payload): string
     {
         $currentTime = new DateTime();
-        $expiresOnTime = $currentTime->add(DateInterval::createFromDateString('10 minutes'));
+        $expiresOnTime = $currentTime->add(DateInterval::createFromDateString('10 seconds'));
 
         $currentTimestamp = $currentTime->getTimestamp();
         $expiry = $expiresOnTime->getTimestamp();

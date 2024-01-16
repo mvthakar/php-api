@@ -1,16 +1,16 @@
 class UnauthorizedError extends Error { }
 
-async function get(url, sendToken = true)
+async function get(url, refreshTokensIfNecessary = true)
 {
-    return await request(url, 'GET', null, sendToken);
+    return await request(url, 'GET', null, refreshTokensIfNecessary);
 }
 
-async function post(url, data, sendToken = true)
+async function post(url, data, refreshTokensIfNecessary = true)
 {
-    return await request(url, 'POST', data, sendToken);
+    return await request(url, 'POST', data, refreshTokensIfNecessary);
 }
 
-async function request(url, method, data, sendToken = true, refreshTokensIfNecessary = true)
+async function request(url, method, data, refreshTokensIfNecessary)
 {
     let result = { status: -1, message: null }
     
@@ -24,12 +24,6 @@ async function request(url, method, data, sendToken = true, refreshTokensIfNeces
                 'Accepts': 'application/json',
             }
         };
-
-        if (sendToken)
-        {
-            let accessToken = localStorage.getItem('accessToken') ?? "";
-            options.headers['Authorization'] = `Bearer ${accessToken}`;
-        }
         
         let response = await fetch(api(url), options);
         if (response.status == 401 && refreshTokensIfNecessary)
@@ -47,22 +41,13 @@ async function request(url, method, data, sendToken = true, refreshTokensIfNeces
         if (!(error instanceof UnauthorizedError))
             return result;
 
-        let refreshResult = await request('auth/tokens/refresh-web.php', 'POST', null, true, false);
+        let refreshResult = await request('auth/tokens/refresh-web.php', 'POST', null, false);
         if (refreshResult.status != 200)
         {
             result.message = "You must login again";
             return result;
         }
         
-        localStorage.setItem('accessToken', refreshResult.message.accessToken);
-        return await request(url, method, data, sendToken);
+        return await request(url, method, data);
     }
 }
-
-function init()
-{
-    $('[data-toggle="tooltip"]').tooltip();
-    console.log("Test");
-}
-
-$(init);

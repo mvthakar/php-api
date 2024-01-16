@@ -12,4 +12,4 @@ if ($pageNumber < 1)
 $db = Database::instance();
 $items = $db->getAll("SELECT `slug`, `name`, `imageFileName` FROM `categories` LIMIT $itemsPerPage OFFSET $offset");
 
-reply($items);
+reply([$items]);
