@@ -13,13 +13,13 @@ class Authorize extends AuthorizeBase
     {
         if ($statusCode == 403)
         {
-            echo "<script>window.location.href = 'index.php';</script>";    
+            echo "<script>window.location.href = '" . urlOf('index.php') . "';</script>";    
             return;
         }
 
         if (!isset($_COOKIE['accessToken']))
         {
-            echo "<script>window.location.href = 'login.php';</script>";
+            echo "<script>window.location.href = '" . urlOf('login.php') . "';</script>";
             return;
         }
 

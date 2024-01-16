@@ -59,3 +59,8 @@ body.dark-mode
 {
     min-width: 6rem !important;
 }
+
+.table td, .table .th
+{
+    vertical-align: middle;
+}
