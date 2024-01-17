@@ -9,7 +9,7 @@ class JwtUtilsBase
     public static function generateAccessToken(array $payload): string
     {
         $currentTime = new DateTime();
-        $expiresOnTime = $currentTime->add(DateInterval::createFromDateString('10 seconds'));
+        $expiresOnTime = $currentTime->add(DateInterval::createFromDateString('10 minutes'));
 
         $currentTimestamp = $currentTime->getTimestamp();
         $expiry = $expiresOnTime->getTimestamp();
