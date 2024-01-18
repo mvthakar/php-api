@@ -41,3 +41,4 @@
         <span class="brand-text font-weight-light">Admin Panel</span>
       </a>
     </aside>
+    <div class="content-wrapper">

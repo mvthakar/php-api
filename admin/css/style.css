@@ -60,7 +60,26 @@ body.dark-mode
     min-width: 6rem !important;
 }
 
+.page-item .page-link
+{
+    color: var(--custom-primary);
+}
+
+.page-item.active .page-link
+{
+    background-color: var(--custom-primary);
+    border-color: var(--custom-primary);
+}
+
 .table td, .table .th
 {
     vertical-align: middle;
+}
+
+#uploaded-image-preview .preview-item 
+{
+    width: auto;
+    height: 200px;
+    margin-right: 10px;
+    margin-bottom: 10px;
 }

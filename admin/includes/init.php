@@ -33,6 +33,6 @@ if (str_ends_with($_SERVER['REQUEST_URI'], 'login.php'))
 } 
 else 
 {
-    Authorize::forRoles(["Admin"]);
     require_once pathOf('includes/header.php');
+    Authorize::forRoles(["Admin"]);
 }
