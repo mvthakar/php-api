@@ -35,7 +35,7 @@ $productImages = $db->getAll(
     [$product->id]
 );
 
-reply([
+reply([[
     "product" => [
         "name" => $product->name,
         "description" => $product->description,
@@ -43,4 +43,4 @@ reply([
         "categories" => $productCategories,
         "images" => $productImages
     ]
-]);
+]]);
