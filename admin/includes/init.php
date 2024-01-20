@@ -21,6 +21,12 @@ function urlOf(string $path)
     return "/" . ADMIN_DIR . "/" . $path;
 }
 
+function active(string $linkName)
+{
+    $currentUrl = $_SERVER['REQUEST_URI'];
+    return (str_contains($currentUrl, $linkName)) ? "active" : "";
+}
+
 require_once appPathOf("libs/Database.php");
 require_once appPathOf("libs/TokenUtils.php");
 

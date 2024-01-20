@@ -75,19 +75,19 @@
               </a>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
-                  <a href="<?= urlOf('categories/index.php') ?>" class="nav-link active">
+                  <a href="<?= urlOf('categories/index.php') ?>" class="nav-link <?= active('categories') ?>">
                     <i class="fas fa-stream nav-icon"></i>
                     <p>Categories</p>
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a href="<?= urlOf('products') ?>" class="nav-link">
+                  <a href="<?= urlOf('products') ?>" class="nav-link <?= active('products') ?>"">
                     <i class="fas fa-shopping-bag nav-icon"></i>
                     <p>Products</p>
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a href="#" class="nav-link">
+                  <a href="<?= urlOf('orders') ?>" class="nav-link <?= active('orders') ?>"">
                     <i class="fas fa-shopping-cart nav-icon"></i>
                     <p>Orders</p>
                   </a>
@@ -104,7 +104,7 @@
               </a>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
-                  <a href="<?= urlOf('change-password.php') ?>" class="nav-link">
+                  <a href="<?= urlOf('change-password.php') ?>" class="nav-link <?= active('change-password') ?>">
                     <i class="fas fa-key nav-icon"></i>
                     <p>Change password</p>  
                   </a>
