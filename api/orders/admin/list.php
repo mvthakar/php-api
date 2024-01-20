@@ -1,6 +1,6 @@
 <?php
 
-// Authorize::forRoles(["Admin"]);
+Authorize::forRoles(["Admin"]);
 get();
 
 $status = $_GET['status'] ?? null;
