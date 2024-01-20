@@ -81,7 +81,7 @@
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a href="#" class="nav-link">
+                  <a href="<?= urlOf('products') ?>" class="nav-link">
                     <i class="fas fa-shopping-bag nav-icon"></i>
                     <p>Products</p>
                   </a>
