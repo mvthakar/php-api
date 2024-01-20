@@ -13,6 +13,10 @@ $slug = GUID::generate();
 $orderStatus = $db->get("SELECT `id` FROM `orderStatus` WHERE `name` = 'In Cart'");
 $userId = $claims["id"];
 
+$userProfile = $db->get("SELECT COUNT(*) AS `count` FROM `userProfiles` WHERE `userId` = ?", [$userId]);
+if ($userProfile->count == 0)
+    error(422, ["Please complete your profile first"]);
+
 $orderProducts = $req->products;
 
 $setOfSlugs = [];
