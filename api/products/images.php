@@ -21,23 +21,7 @@ if ($product == null)
 $db = Database::instance();
 $productId = $product->id;
 
-$productImages = $db->getAll(
-    "SELECT `imageFileName` FROM `productImages` WHERE `productId` = ?",
-    [$productId]
-);
-
 $productUploads = "public/uploads/products";
-if (count($productImages) > 0)
-{
-    foreach ($productImages as $productImage)
-    {
-        $fileName = $productImage->imageFileName;
-        unlink(pathOf("$productUploads/$fileName"));
-    }
-    
-    $db->execute("DELETE FROM `productImages` WHERE `productId` = ?", [$productId]);
-}
-
 $allowedImageTypes = ['image/jpeg', 'image/jpg', 'image/png'];
 
 $setOfQuestionMarks = [];
