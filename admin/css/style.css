@@ -76,10 +76,35 @@ body.dark-mode
     vertical-align: middle;
 }
 
-#uploaded-image-preview .preview-item 
+.preview-item 
 {
     width: auto;
     height: 200px;
     margin-right: 10px;
     margin-bottom: 10px;
+}
+
+.img-wrap {
+    position: relative;
+}
+
+.img-preview.deleting { 
+    opacity: 0.3;
+}
+
+.img-wrap .delete-spinner {
+    position: absolute;
+    z-index: 100;
+    top: 11px;
+    right: 21px;
+}
+
+.img-wrap .delete {
+    position: absolute;
+    top: 5px;
+    right: 15px;
+    z-index: 100;
+    width: 28px;
+    height: 28px;
+    cursor: pointer;
 }
