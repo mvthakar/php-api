@@ -1,6 +1,6 @@
 <?php
 
-Authorize::forRoles(["Admin"]);
+// Authorize::forRoles(["Admin"]);
 get();
 
 $status = $_GET['status'] ?? null;
@@ -16,22 +16,24 @@ $selectedStatusWhere = $selectedStatus == null ? "" : " AND `orderStatusId` = {$
 
 $orders = $db->getAll(
     "SELECT 
-        `slug`, 
-        `orderedOnDateTime`, 
-        `deliveredOnDateTime`, 
-        `totalPriceWithTax`,
-        (SELECT 
-            `name` 
-        FROM 
-            `orderStatus` 
-        WHERE 
-            `orderStatus`.`id` = `orders`.`orderStatusId` 
+        `userProfiles`.`name`, 
+        `userProfiles`.`mobileNumber`,
+        `orders`.`slug`, 
+        `orders`.`orderedOnDateTime`, 
+        `orders`.`deliveredOnDateTime`, 
+        `orders`.`totalPriceWithTax`,
+        (
+            SELECT `orderStatus`.`name` FROM `orderStatus` WHERE `orderStatus`.`id` = `orders`.`orderStatusId` 
         ) AS `orderStatus`
     FROM 
         `orders` 
-        WHERE `orderStatusId` != ?
+    LEFT JOIN
+        `userProfiles`
+    ON
+        `userProfiles`.`userId` = `orders`.`userId`
+    WHERE `orders`.`orderStatusId` != ?
         $selectedStatusWhere 
-    ORDER BY `orderedOnDateTime` DESC
+    ORDER BY `orders`.`orderedOnDateTime` DESC
     LIMIT $itemsPerPage OFFSET $offset",
     [$inCartOrderStatus->id]
 );
