@@ -16,24 +16,24 @@
     </div>
   </section>
   <section class="content mx-5">
-    <div class="row">
+    <form class="row" method="get">
       <div class="col">
-        <form class="input-group" method="get" action=".">
+        <div class="input-group">
           <input value="<?= $_GET['search'] ?? '' ?>" type="text" class="form-control" name="search" placeholder="Search" autofocus>
           <div class="input-group-append">
             <button type="submit" class="btn btn-primary">
               <i class="fas fa-search"></i>
             </button>
           </div>
-        </form>
+      </div>
       </div>
       <div class="col" style="text-align: end">
         <div class="row">
           <div class="col d-flex justify-content-end align-items-center">
-            Rows:
+            <b>Rows:</b>
           </div>
           <div class="col">
-            <select id="count" class="custom-select" onchange="changeNumberOfRows()">
+            <select name="count" id="count" class="custom-select" onchange="changeNumberOfRows()">
               <option <?= $count == "10" ? "selected" : "" ?> value="10">10</option>
               <option <?= $count == "20" ? "selected" : "" ?> value="20">20</option>
               <option <?= $count == "30" ? "selected" : "" ?> value="30">30</option>
@@ -44,7 +44,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </form>
     <div class="row">&nbsp;</div>
     <div class="card card-outline card-info">
       <div class="card-body">
