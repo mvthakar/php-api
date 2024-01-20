@@ -14,6 +14,16 @@ $inCartOrderStatus = $db->get("SELECT `id` FROM `orderStatus` WHERE `name` = 'In
 $selectedStatus = $db->get("SELECT `id` FROM `orderStatus` WHERE `name` = ?", [$status]);
 $selectedStatusWhere = $selectedStatus == null ? "" : " AND `orderStatusId` = {$selectedStatus->id}";
 
+$count = $db->get(
+    "SELECT 
+        COUNT(*) AS `totalItems`
+    FROM 
+        `orders` 
+    WHERE `orders`.`orderStatusId` != ?
+        $selectedStatusWhere",
+    [$inCartOrderStatus->id]
+);
+
 $orders = $db->getAll(
     "SELECT 
         `userProfiles`.`name`, 
@@ -38,4 +48,4 @@ $orders = $db->getAll(
     [$inCartOrderStatus->id]
 );
 
-reply($orders);
+reply([["pageCount" => ceil($count->totalItems / $itemsPerPage), "orders" => $orders]]);
