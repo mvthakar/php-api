@@ -31,7 +31,7 @@ $productCategories = $db->getAll(
 );
 
 $productImages = $db->getAll(
-    "SELECT `imageFileName` FROM `productImages` WHERE `productId` = ?",
+    "SELECT `id`, `imageFileName` FROM `productImages` WHERE `productId` = ?",
     [$product->id]
 );
 
