@@ -26,4 +26,14 @@ class Validator
 
         return $passwordErrors;
     }
+
+    public static function mobileNumber($mobileNumber): bool
+    {
+        return preg_match("/^[0-9]{10}$/", $mobileNumber) > 0;
+    }
+
+    public static function pincode($pincode): bool
+    {
+        return preg_match("/^[0-9]{6}$/", $pincode) > 0;
+    }
 }

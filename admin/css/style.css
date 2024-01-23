@@ -1,0 +1,120 @@
+:root
+{
+    --custom-primary: #356ca8;
+    --custom-primary-hover: #28517c;
+    --custom-breadcrumb-color: #356ca8;
+}
+
+body.dark-mode
+{
+    --custom-primary: #6889ac;
+    --custom-primary-hover: #6889ac;
+    --custom-breadcrumb-color: white;
+}
+
+.dark-mode .sidebar-dark-primary .nav-sidebar > .nav-item > .nav-link.active
+{
+    background-color: #6889ac;
+}
+
+.sidebar-light-primary .nav-sidebar > .nav-item > .nav-link.active
+{
+    background-color: #356ca8;
+}
+
+[class*="sidebar-dark-"] .nav-treeview > .nav-item > .nav-link.active
+{
+    background-color: #505963;
+    color: white;
+}
+
+.card-primary:not(.card-outline) > .card-header
+{
+    background-color: var(--custom-primary) !important;
+}
+
+.btn-primary
+{
+    background-color: var(--custom-primary) !important;
+    border-color: var(--custom-primary) !important;
+}
+
+.btn-primary:hover
+{
+    background-color: var(--custom-primary-hover) !important;
+    border-color: var(--custom-primary-hover) !important;
+}
+
+.breadcrumb-item a:not(.btn)
+{
+    color: var(--custom-breadcrumb-color) !important;
+}
+
+.breadcrumb-item a:not(.btn):hover
+{
+    color: var(--custom-primary-hover) !important;
+}
+
+.card-info.card-outline
+{
+    border-color: var(--custom-primary);
+}
+
+#btn-submit 
+{
+    min-width: 6rem !important;
+}
+
+.page-item .page-link
+{
+    color: var(--custom-primary);
+}
+
+.page-item.active .page-link
+{
+    background-color: var(--custom-primary);
+    border-color: var(--custom-primary);
+}
+
+.table td, .table .th
+{
+    vertical-align: middle;
+}
+
+.preview-item 
+{
+    width: auto;
+    height: 200px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+.img-wrap {
+    position: relative;
+}
+
+.img-preview.deleting { 
+    opacity: 0.3;
+}
+
+.img-wrap .delete-spinner {
+    position: absolute;
+    z-index: 100;
+    top: 11px;
+    right: 21px;
+}
+
+.img-wrap .delete {
+    position: absolute;
+    top: 5px;
+    right: 15px;
+    z-index: 100;
+    width: 28px;
+    height: 28px;
+    cursor: pointer;
+}
+
+table.info td 
+{
+    padding-top: 5px;
+}

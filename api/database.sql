@@ -26,14 +26,38 @@ CREATE TABLE `users`
     `passwordHash` VARCHAR(500) DEFAULT NULL,
     `signedUpOnDateTime` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-    `authToken` VARCHAR(500) DEFAULT NULL,
-    `fcmToken` VARCHAR(500) DEFAULT NULL,
-
     `authProviderId` INT NOT NULL,
     CONSTRAINT `fkAuthProviderIdInUsers` FOREIGN KEY (`authProviderId`) REFERENCES `authProviders`(`id`),
 
     `roleId` INT NOT NULL,
     CONSTRAINT `fkRoleIdInUserRoles` FOREIGN KEY (`roleId`) REFERENCES `roles`(`id`)
+);
+
+CREATE TABLE `tokenTypes`
+(
+    `id` INT PRIMARY KEY AUTO_INCREMENT,
+    `name` VARCHAR(200) NOT NULL
+);
+INSERT INTO `tokenTypes` (`name`) VALUES 
+    ('RefreshToken'), 
+    ('AuthToken'), 
+    ('FcmToken');
+
+CREATE TABLE `userTokens`
+(
+    `id` INT PRIMARY KEY AUTO_INCREMENT,
+
+    `tokenTypeId` INT NOT NULL,
+    CONSTRAINT `fkTokenTypeIdinUserTokens` FOREIGN KEY (`tokenTypeId`) REFERENCES `tokenTypes`(`id`),
+
+    `clientId` TEXT NOT NULL,
+    `value` TEXT NOT NULL,
+
+    `issuedOnDateTime` DATETIME DEFAULT NULL,
+    `expiresOnDateTime` DATETIME DEFAULT NULL,
+
+    `userId` INT NOT NULL,
+    CONSTRAINT `fkUserIdinUserTokens` FOREIGN KEY (`userId`) REFERENCES `users`(`id`)
 );
 
 CREATE TABLE `generatedOtps`
@@ -56,7 +80,7 @@ CREATE TABLE `userProfiles`
     `pincode` VARCHAR(6) NOT NULL,
     `city` VARCHAR(255) NOT NULL,
     `state` VARCHAR(255) NOT NULL,
-    `profilePictureFileName` VARCHAR(255) DEFAULT NULL,
+    `avatarFileName` VARCHAR(255) DEFAULT NULL,
 
     `userId` INT NOT NULL,
     CONSTRAINT `fkUserIdinUserProfiles` FOREIGN KEY (`userId`) REFERENCES `users`(`id`)
@@ -67,7 +91,7 @@ CREATE TABLE `categories`
     `id` INT PRIMARY KEY AUTO_INCREMENT,
     `slug` VARCHAR(255) NOT NULL,
     `name` VARCHAR(100) NOT NULL,
-    `imageFileName` VARCHAR(255) NOT NULL
+    `imageFileName` VARCHAR(255) DEFAULT NULL
 );
 
 CREATE TABLE `products`
@@ -76,8 +100,11 @@ CREATE TABLE `products`
     `slug` VARCHAR(255) NOT NULL,
     `name` VARCHAR(255) NOT NULL,
     `description` TEXT NOT NULL,
-    `price` NUMERIC NOT NULL,
-    `isOutOfStock` BOOLEAN NOT NULL
+    `price` FLOAT NOT NULL,
+    `isOutOfStock` BOOLEAN NOT NULL,
+    `createdOnDateTime` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `updatedOnDateTime` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    `isDeleted` BOOLEAN NOT NULL DEFAULT FALSE
 );
 
 CREATE TABLE `productImages`
@@ -107,7 +134,7 @@ CREATE TABLE `orderStatus`
 );
 INSERT INTO `orderStatus` (`name`) VALUES 
     ('In cart'), 
-    ('Pending'),
+    ('Placed'),
     ('On the way'), 
     ('Delivered'), 
     ('Canceled'), 
@@ -121,12 +148,12 @@ CREATE TABLE `orders`
     `orderedOnDateTime` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `deliveredOnDateTime` DATETIME DEFAULT NULL,
     
-    `totalPriceWithoutTax` NUMERIC NOT NULL,
-    `cgstPercentage` NUMERIC NOT NULL,
-    `cgstAmount` NUMERIC NOT NULL,
-    `sgstPercentage` NUMERIC NOT NULL,
-    `sgstAmount` NUMERIC NOT NULL,
-    `totalPriceWithTax` NUMERIC NOT NULL,
+    `totalPriceWithoutTax` FLOAT NOT NULL,
+    `cgstPercentage` FLOAT NOT NULL,
+    `cgstAmount` FLOAT NOT NULL,
+    `sgstPercentage` FLOAT NOT NULL,
+    `sgstAmount` FLOAT NOT NULL,
+    `totalPriceWithTax` FLOAT NOT NULL,
 
     `orderStatusId` INT NOT NULL,
     CONSTRAINT `fkOrderStatusIdinOrders` FOREIGN KEY (`orderStatusId`) REFERENCES `orderStatus`(`id`),
@@ -138,11 +165,14 @@ CREATE TABLE `orders`
 CREATE TABLE `orderProducts`
 (
     `id` INT PRIMARY KEY AUTO_INCREMENT,
+    `slug` VARCHAR(255) NOT NULL,
     `quantity` INT NOT NULL,
 
     `orderId` INT NOT NULL,
-    CONSTRAINT `fkOrderIdinOrderProducts` FOREIGN KEY (`orderId`) REFERENCES `orders`(`id`),
+    CONSTRAINT `fkOrderIdinOrderProducts` FOREIGN KEY (`orderId`) REFERENCES `orders`(`id`) ON DELETE CASCADE,
     
     `productId` INT NOT NULL,
-    CONSTRAINT `fkProductIdInOrderProducts` FOREIGN KEY (`productId`) REFERENCES `products`(`id`)
+    CONSTRAINT `fkProductIdInOrderProducts` FOREIGN KEY (`productId`) REFERENCES `products`(`id`),
+
+    CONSTRAINT `ukOrderIdProductId` UNIQUE (`orderId`, `productId`)
 );
