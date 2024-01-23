@@ -55,6 +55,11 @@ body.dark-mode
     color: var(--custom-primary-hover) !important;
 }
 
+.card-info.card-outline
+{
+    border-color: var(--custom-primary);
+}
+
 #btn-submit 
 {
     min-width: 6rem !important;
@@ -107,4 +112,9 @@ body.dark-mode
     width: 28px;
     height: 28px;
     cursor: pointer;
+}
+
+table.info td 
+{
+    padding-top: 5px;
 }

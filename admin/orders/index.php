@@ -64,16 +64,18 @@ $status = $_GET['status'] ?? "All";
             <thead>
               <tr>
                 <th width="10%" scope="col" class="text-center">Number</th>
-                <th width="20%" scope="col">Customer name</th>
-                <th width="20%" scope="col">Mobile number</th>
+                <th width="10%" scope="col">Placed Date</th>
+                <th width="10%" scope="col">Customer</th>
+                <th width="10%" scope="col">Phone</th>
                 <th width="20%" scope="col">Total Price (inc. Tax)</th>
-                <th width="20%" scope="col">Status</th>
-                <th width="10%" scope="col">View</th>
+                <th width="15%" scope="col">Status</th>
+                <th width="5%" scope="col">View</th>
+                <th width="20%" scope="col">Change status</th>
               </tr>
             </thead>
             <tbody id="orders">
               <tr>
-                <td class="py-5 text-center" colspan="5">
+                <td class="py-5 text-center" colspan="8">
                   <div class="spinner-border" role="status">
                     <span class="sr-only">Loading...</span>
                   </div>

@@ -28,7 +28,7 @@ class Authorize extends AuthorizeBase
         "{" .
         "    let refreshResult = await request('auth/tokens/refresh-web.php', 'POST', null, true, false);" .
         "    if (refreshResult.status != 200)" .
-        "        window.location.href = 'login.php';" .
+        "        window.location.href = '" . urlOf('login.php') . "';" .
         "}" .
         "$(bro);" .
         "</script>";

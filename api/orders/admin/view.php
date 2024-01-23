@@ -1,37 +1,56 @@
 <?php
 
 Authorize::forRoles(["Admin"]);
-$req = post();
+get();
 
-if (!isset($req->orderId))
+if (!isset($_GET['id']))
     error(400);
 
 $db = Database::instance();
 
-$orderSlug = $req->orderId;
-$order = $db->get(
-    "SELECT 
-        `id`,
-        `orderedOnDateTime`,
-        `deliveredOnDateTime`,
-        `totalPriceWithoutTax`,
-        `cgstPercentage`,
-        `cgstAmount`,
-        `sgstPercentage`,
-        `sgstAmount`,
-        `totalPriceWithTax`, 
-        (SELECT 
-            `name` 
-        FROM 
-            `orderStatus` 
-        WHERE 
-            `orderStatus`.`id` = `orders`.`orderStatusId`
-        ) AS `orderStatus` 
+$orderSlug = $_GET['id'];
+$order = $db->get("
+    SELECT 
+        `orders`.`id`,
+        `orders`.`orderedOnDateTime`,
+        `orders`.`deliveredOnDateTime`,
+        `orders`.`totalPriceWithoutTax`,
+        `orders`.`cgstPercentage`,
+        `orders`.`cgstAmount`,
+        `orders`.`sgstPercentage`,
+        `orders`.`sgstAmount`,
+        `orders`.`totalPriceWithTax`, 
+        (
+            SELECT 
+                `name` 
+            FROM 
+                `orderStatus` 
+            WHERE 
+                `orderStatus`.`id` = `orders`.`orderStatusId`
+        ) AS `orderStatus`,
+        (
+            SELECT
+                `email`
+            FROM
+                `users`
+            WHERE
+                `users`.`id` = `orders`.`userId`
+        ) AS `userEmail`,
+        `userProfiles`.`name`,
+        `userProfiles`.`mobileNumber`,
+        `userProfiles`.`address`,
+        `userProfiles`.`pincode`,
+        `userProfiles`.`city`,
+        `userProfiles`.`state`
     FROM 
-        `orders` 
+        `orders`
+    INNER JOIN 
+        `userProfiles`
+    ON
+        `orders`.`userId` = `userProfiles`.`userId`
     WHERE 
-    `slug` = ?",
-    [$orderSlug]
+        `slug` = ?
+    ", [$orderSlug]
 );
 
 if ($order == null)
@@ -58,9 +77,9 @@ $orderProducts = $db->getAll("
         `products`
     ON
         `products`.`id` = `orderProducts`.`productId`
-    WHERE `orderId` = ?
-    ",
-    [$order->id]
+    WHERE 
+        `orderId` = ?
+    ", [$order->id]
 );
 
 unset($order->id);
